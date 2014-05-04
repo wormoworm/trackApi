@@ -10,6 +10,8 @@ import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.amazonaws.auth.BasicSessionCredentials;
+
 public class Utils {
 	public static String fmt(String string, Object... p){
     	String ret = null;
@@ -26,12 +28,25 @@ public class Utils {
 		return new Header[]{token,user};
 	}
 	
-	public static String toJson(Map<String,String> map){		
+	public static String toJson(Map<String,? extends Object> map){		
+		
+		JSONObject jsonParams = toJsonObject(map);
+		String res =  jsonParams.toString();
+		LogH.i("Parameters : {0}", res);
+		return res;
+		
+	}
+	public static JSONObject toJsonObject(Map<String,? extends Object> map){		
 		try {
-			JSONObject jsonParams = new JSONObject(map);
-			String res =  jsonParams.toString(2);
-			LogH.i("Parameters : {0}", res);
-			return res;
+			JSONObject jsonParams = new JSONObject();
+			for(String k : map.keySet()){
+				Object v= map.get(k);
+				if(v instanceof Map)
+					jsonParams.put(k, toJsonObject((Map<String,? extends Object>) v));
+				else
+					jsonParams.put(k,v);
+			}			
+			return jsonParams;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
@@ -52,14 +67,14 @@ public class Utils {
 		    return null;
 		}
 	}
-//	public static BasicSessionCredentials getToken(String s3Tocken){
-//		LogH.i("S3TOCKEN====>{0}", s3Tocken);
-//		Map<String,String> map = toMap(s3Tocken);
-//		LogH.i("CRED====> {0}", map);
-//		 BasicSessionCredentials c = new BasicSessionCredentials(
-//				  map.get("access_key_id"), 
-//			      map.get("secret_access_key"), 
-//			      map.get("session_token"));
-//		 return c;
-//	}
+	public static BasicSessionCredentials getToken(String s3Tocken){
+		LogH.i("S3TOCKEN====>{0}", s3Tocken);
+		Map<String,String> map = toMap(s3Tocken);
+		LogH.i("CRED====> {0}", map);
+		 BasicSessionCredentials c = new BasicSessionCredentials(
+				  map.get("access_key_id"), 
+			      map.get("secret_access_key"), 
+			      map.get("session_token"));
+		 return c;
+	}
 }

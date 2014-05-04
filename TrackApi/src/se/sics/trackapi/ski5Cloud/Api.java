@@ -17,9 +17,10 @@ public class Api {
 	public static  String TOKEN ="457c7ff34e0a90f3b0687677dea566cc";
 	
 	//------------ APIs-----------
-//	public static final String ALL_USERS=fmt("{0}/users.json" ,SITE);;
 	private static final String USER_TRACKS= "{0}/users/{1}/userTracks";
-	private static final String USER_CLASSIFICATIONS= "{0}/tracks/{1}/classifications";
+	private static final String USER_STYLES= "{0}/styles";
+	private static final String TRACK_CLASSIFICATIONS= "{0}/tracks/{1}/classifications";	
+	private static final String TRACK_LOGFILES= "{0}/tracks/{1}/log_files";
 	
 	private static final String USER_STATS= "{0}/users/{1}/userStats";	
 	private static final String USER_TECH= "{0}/users/{1}/userTechStats";
@@ -27,12 +28,23 @@ public class Api {
 	
 	private static final String SIGN_IN= fmt("{0}/api_users/sign_in.json",HOST);
 	private static final String UPLOAD_TICKET = "{0}/uploads";
+	private static final String SUBMIT_TRACK =  "{0}/uploads/{1}/process_now";
 	
 	
-	public static String trackClassifications(int trackId){
-		return  fmt(USER_CLASSIFICATIONS,SITE,trackId);
+	public static String trackClassifications(String  trackId){
+		return  fmt(TRACK_CLASSIFICATIONS,SITE,trackId);
 	}
-	
+	public static String trackLogFiles(String trackId){
+		return  fmt(TRACK_LOGFILES,SITE,trackId);
+	}
+	public static String userStyles() {
+		
+		return fmt(USER_STYLES,SITE);
+	}
+	public static String submitTrack(String uploadId) {
+		
+		return fmt(SUBMIT_TRACK,SITE,uploadId);
+	}
 	public static  String uploadTicket(){				
 		return fmt(UPLOAD_TICKET,SITE);
 	}
@@ -65,4 +77,7 @@ public class Api {
 		LogH.i("URL WITH PARAMs ====> {0}", withParams);
 		return withParams;		
 	}
+
+
+
 }

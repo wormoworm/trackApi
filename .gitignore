@@ -1,0 +1,4 @@
+TrackApi/bin/*
+*.class
+TrackApi/.settings/*
+TrackApi/.project
