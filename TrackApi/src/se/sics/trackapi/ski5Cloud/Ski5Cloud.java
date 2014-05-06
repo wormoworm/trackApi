@@ -16,7 +16,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 public class Ski5Cloud {
 	Ski5CloudHttpClient client;	 
 	
-	final Header[] headers;
+	Header[] headers;
 	final ExampleActivity a;
 	public Ski5Cloud(ExampleActivity a){
 		headers = Utils.getDefaultHeaders(Api.TOKEN, Api.USER_NAME); // you need to re-implement this, 
@@ -44,7 +44,22 @@ public class Ski5Cloud {
 		devmap.put("unique_id", "dsakfjhaskshjkdfasd");
 		devmap.put("device_name", "Samsung Ace 3");
 		map.put("device", devmap);
-		client.doJsonPost(url, Utils.toJson(map), null);
+		client.doJsonPost(url, Utils.toJson(map), null,new ResponseHandlerAdapter(url) {
+			
+			@Override
+			void handleCloudResponse(byte[] binaryData, int statusCode,
+					Header[] headers_, String reqUrl) {
+				
+				Map<String,String> d = Utils.toMap(new String(binaryData));
+				Map<String,String> data = Utils.toMap(d.get("user"));
+				Api.TOKEN=data.get("auth_token");
+				System.out.println("TOCKEN : "+Api.TOKEN);
+				Api.ACCOUNT_ID=Integer.parseInt(data.get("account_id"));
+				Api.USER_ID=Integer.parseInt(data.get("id"));
+				headers = Utils.getDefaultHeaders(Api.TOKEN, Api.USER_NAME);
+				upload();
+			}
+		});
 	}	
 	public void upload(){
 		String url = Api.uploadTicket();

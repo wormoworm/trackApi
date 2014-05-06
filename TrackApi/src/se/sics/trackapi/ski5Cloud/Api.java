@@ -4,9 +4,9 @@ import static se.sics.trackapi.ski5Cloud.Utils.fmt;
 import com.loopj.android.http.RequestParams;
 public class Api {
 	//----------- ESSENTIAL CONFIGURATIONS-----------
-	public static final int ACCOUNT_ID=3; // you can get the account id from the response of the sign in (form multi-account api)
+	public static int ACCOUNT_ID=3; // you can get the account id from the response of the sign in (form multi-account api)
 	
-	public static final String HOST= "http://ski5-staging.herokuapp.com";
+	public static final String HOST= "http://10.0.0.23:3000";//"http://ski5-staging.herokuapp.com";
 	
 	public static final String SITE= fmt("{0}/accounts/{1}",HOST,ACCOUNT_ID);
 	
