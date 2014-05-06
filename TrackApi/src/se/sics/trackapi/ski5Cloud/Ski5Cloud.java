@@ -36,9 +36,14 @@ public class Ski5Cloud {
 	
 	public void signIn(String userName,String password){
 		String url = Api.signIn();
-		Map<String,String> map = new HashMap<String, String>();
+		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("user_name", userName);
 		map.put("password",password);
+		Map<String,String> devmap = new HashMap<String, String>();
+		devmap.put("gcm_id", Api.gcmId);
+		devmap.put("unique_id", "dsakfjhaskshjkdfasd");
+		devmap.put("device_name", "Samsung Ace 3");
+		map.put("device", devmap);
 		client.doJsonPost(url, Utils.toJson(map), null);
 	}	
 	public void upload(){

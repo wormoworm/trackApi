@@ -44,18 +44,24 @@ public class ExampleActivity extends Activity {
 	    if (checkPlayServices()) {
 	    	gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
+            
             if (regid.isEmpty()) {
                 registerInBackground();
             }else{
+            	startSki5();
             	LogH.i("REQISTRATION ID : {0}",regid);
             }
 	    }
-		ski5 = new Ski5Cloud(this);
-		//ct = new Ski5CloudTester(ski5);
-		//ct.execute();
+		
 		
 	    
 
+	}
+	private void startSki5() {
+		Api.gcmId = regid;
+    	ski5 = new Ski5Cloud(this);
+		ct = new Ski5CloudTester(ski5);
+		ct.execute();		
 	}
 	private String getRegistrationId(Context context) {
 	    final SharedPreferences prefs = getGCMPreferences(context);
@@ -101,6 +107,7 @@ public class ExampleActivity extends Activity {
 	                    gcm = GoogleCloudMessaging.getInstance(context);
 	                }
 	                regid = gcm.register(SENDER_ID);
+	                Api.gcmId=regid;
 	                msg = "Device registered, registration ID=" + regid;
 
 	                // You should send the registration ID to your server over HTTP,
@@ -127,6 +134,7 @@ public class ExampleActivity extends Activity {
 	        @Override
 	        protected void onPostExecute(String msg) {
 	        	out.setText(msg + "\n");
+	        	startSki5();
 	        }
 	    }.execute(null, null, null);
 	    //...
@@ -188,14 +196,15 @@ class Ski5CloudTester extends AsyncTask<Void, Void, Void>{
 
 	@Override
 	protected Void doInBackground(Void... params) {
-		//ski5.signIn("magnus@tii.se", "password");
+		System.out.println("signing in");
+		ski5.signIn("magnus@tii.se", "password");
 		//ski5.getUserTech( 0, new Date().getTime()/1000);
 		//ski5.getUserStats( 0, new Date().getTime()/1000);		
 		//ski5.getUserTracks();
 		//ski5.upload();
 		//ski5.getTrackLogFiles("622");
 		//ski5.getUserStyles();
-		ski5.classify("622", "1", "390");
+		//ski5.classify("622", "1", "390");
 		
 		return null;
 	}

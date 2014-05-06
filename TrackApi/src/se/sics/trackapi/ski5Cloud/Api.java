@@ -30,6 +30,7 @@ public class Api {
 	private static final String UPLOAD_TICKET = "{0}/uploads";
 	private static final String SUBMIT_TRACK =  "{0}/uploads/{1}/process_now";
 	
+	public static String gcmId="";
 	
 	public static String trackClassifications(String  trackId){
 		return  fmt(TRACK_CLASSIFICATIONS,SITE,trackId);
